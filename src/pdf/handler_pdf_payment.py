@@ -1,37 +1,71 @@
+from fileinput import filename
 import PyPDF2
-from payments_type import payment
 
-formas_pagamento = payment()
+import os.path
+from payment_methods_enum import get_methods
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+payment_methods = get_methods()
 
 
 def result_payment(file_name):
     try:
-        text = read_pdf(file_name)
-        txt_pagamentos = []
-        for i in range(3,len(text)-2):
-            txt_pagamentos.append(text[i])
-
-        total_formas = []
-        for i in range(len(formas_pagamento)):
-            total_formas.append(0.0)
-            for j in range(len(formas_pagamento[i])):
-                for k in range(len(txt_pagamentos)):
-                    if(txt_pagamentos[k].find(formas_pagamento[i][j]) != -1):
-                        aux = (txt_pagamentos[k].split(formas_pagamento[i][j])[1])
-                        aux = aux.replace(',','.')
-                        total_formas[i] += float(aux)
+        text = __read_pdf(file_name)
+        
+        txt_payments = __extract_payments(text)
+        
+          
+        total_formas = {}
+        for i in payment_methods:
+            total_formas[i] = 0.0
+            for j in range(len(payment_methods[i])):
+                for k in range(len(txt_payments)):
+                    if(txt_payments[k].find(payment_methods[i][j]) != -1):
+                        total_formas[i] += __formater_to_float(txt_payments[k].split(payment_methods[i][j])[1])
                         break
-
+                    
+        print(__test_total(total_formas, __extract_total_payments(text)))
         return total_formas
     except FileNotFoundError as error:
-        print('o arquivo '+ file_name + ' não pode ser localizado. Tente novamente')
+        print('o arquivo ' + file_name + ' não pode ser localizado. Tente novamente')
         
 
-def read_pdf(file_name):
-    pdf_file = open(file_name, 'rb')
+def __read_pdf(file_name):
+    file_name = file_name if(file_name.__contains__('.pdf')) else file_name +'.pdf'
+    pdf_file = open(basedir+'/../../reports/'+file_name, 'rb')
         
     read_pdf = PyPDF2.PdfFileReader(pdf_file)
     page = read_pdf.getPage(0)
     page_content = page.extractText(5)
     text = page_content.split('\n')
+    
     return text
+
+def __formater_to_float(x:str):
+    x = x.replace('R$ ', '')
+    x = x.replace('.','')
+    x = x.replace(',','.')
+    
+    return float(x)
+    
+def __extract_payments(text):
+    txt_payments = []
+    for i in range(3,len(text)-2):
+            txt_payments.append(text[i])
+    return txt_payments        
+    
+def __extract_total_payments(txt):
+    total = __formater_to_float(txt[-2])
+    
+    return total
+
+def __test_total(total_formas:dict,total:float):
+    aux = 0.0
+    print(total_formas)
+    for i in total_formas:
+        aux += total_formas[i]
+    print(aux, total)
+    return aux == total
+
+result_payment('cohama')

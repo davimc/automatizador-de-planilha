@@ -1,5 +1,5 @@
-import handler_pdf_payment as pdf_handler
-import store
+import pdf.handler_pdf_payment as pdf_handler
+import infos.store as store
 
 def stores_results():
     stores_results = {}
