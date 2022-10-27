@@ -1,8 +1,9 @@
 from fileinput import filename
+from operator import contains
 import PyPDF2
 
 import os.path
-from payment_methods_enum import get_methods
+from .payment_methods_enum import get_methods
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -14,7 +15,7 @@ def result_payment(file_name):
         text = __read_pdf(file_name)
         
         txt_payments = __extract_payments(text)
-        
+        total = __extract_total_payments(text)
           
         total_formas = {}
         for i in payment_methods:
@@ -24,11 +25,16 @@ def result_payment(file_name):
                     if(txt_payments[k].find(payment_methods[i][j]) != -1):
                         total_formas[i] += __formater_to_float(txt_payments[k].split(payment_methods[i][j])[1])
                         break
-                    
-        print(__test_total(total_formas, __extract_total_payments(text)))
-        return total_formas
+
+        aux = 0.0
+        for i in total_formas:
+            aux += total_formas[i]
+        
+        return (total_formas,total) if __test_total(total_formas, total) else False
     except FileNotFoundError as error:
         print('o arquivo ' + file_name + ' não pode ser localizado. Tente novamente')
+    except ValueError as error:
+        print(error)
         
 
 def __read_pdf(file_name):
@@ -46,7 +52,7 @@ def __formater_to_float(x:str):
     x = x.replace('R$ ', '')
     x = x.replace('.','')
     x = x.replace(',','.')
-    
+
     return float(x)
     
 def __extract_payments(text):
@@ -62,10 +68,6 @@ def __extract_total_payments(txt):
 
 def __test_total(total_formas:dict,total:float):
     aux = 0.0
-    print(total_formas)
     for i in total_formas:
         aux += total_formas[i]
-    print(aux, total)
-    return aux == total
-
-result_payment('cohama')
+    return round(aux,2) == round(total,2)
