@@ -1,5 +1,6 @@
 import pdf.handler_pdf_payment as pdf_handler
 import infos.store as store
+import spreadsheet.handler_gsheets_payment as spread
 
 def stores_results():
     stores_results = {}
@@ -7,6 +8,9 @@ def stores_results():
         stores_results[x] = pdf_handler.result_payment(x)
     return(stores_results)
 
+
+if __name__ == '__main__':
+    stores_results()
 results = stores_results()
 for i in results:
     print(i)

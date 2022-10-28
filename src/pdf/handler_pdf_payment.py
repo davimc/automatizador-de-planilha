@@ -3,7 +3,7 @@ from operator import contains
 import PyPDF2
 
 import os.path
-from .payment_methods_enum import get_methods
+from payment_methods_enum import get_methods
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 

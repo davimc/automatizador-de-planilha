@@ -1,2 +1,3 @@
-client_secret.txt
+*.txt
 *.json
+*.pdf
