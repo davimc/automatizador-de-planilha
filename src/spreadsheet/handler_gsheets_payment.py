@@ -8,17 +8,17 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-from 
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 # The ID and range of a sample spreadsheet.
 SAMPLE_SPREADSHEET_ID = '1Piami0of4IQwRWdsFqpZm8uJvNY99z8toHCYOIRlkt4'
-SAMPLE_RANGE_NAME = '1!B5:H12'
+RANGE_SUBWAY = 'B5:H12'
+RANGE_RESTAURANT = 'B15:H16'
 
 
-def main():
+def __get_credentials():
     creds = None
     
     if os.path.exists('token.json'):
@@ -34,27 +34,57 @@ def main():
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
+    return creds
 
+def __get_sheet(creds):
+    service = build('sheets', 'v4', credentials=creds)
+    sheet = service.spreadsheets()
+    
+    return sheet
+    
+def __has_already_populated(sheet, day):
+    
+    result_subway = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+        range= day+"!"+RANGE_SUBWAY).execute()
+    
+    result_restaurant = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+        range= day+"!"+RANGE_RESTAURANT).execute()
+            
+    if('values' in result_subway or 'values' in result_restaurant):
+        raise Exception("Planilha já populada")
+
+def __simulator(sheet, day):
+    
+    result_subway = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+        range= day+"!"+RANGE_SUBWAY).execute()
+    
+    result_restaurant = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+        range= day+"!"+RANGE_RESTAURANT).execute()
+    
+    return (result_subway, result_restaurant)
+
+def __populate(sheet, day:str, stores_results):
+    result_subway = sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+        range= day+"!"+RANGE_SUBWAY, valueInputOption="RAW",body = stores_results[0]).execute()
+    result_restaurant = sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+       range= day+"!"+RANGE_RESTAURANT, valueInputOption="RAW",body = stores_results[1]).execute()
+def populate_sheet(day):
+    
     try:
-        service = build('sheets', 'v4', credentials=creds)
+        creds = __get_credentials()    
+        sheet = __get_sheet(creds)
+        __has_already_populated(sheet,day)
+        (result, result2) = __simulator(sheet, "1")
+        __populate(sheet, day, stores_results=[result['values'], result2['values']])
+        
 
-        # Call the Sheets API
-        sheet = service.spreadsheets()
-        result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
-                                    range=SAMPLE_RANGE_NAME).execute()
-        values = result.get('values', [])
 
-        if not values:
-            print('No data found.')
-            return
-
-        print('Name, Major:')
-        for row in values:
-            # Print columns A and E, which correspond to indices 0 and 4.
-            print('%s, %s' % (row[0], row[4]))
     except HttpError as err:
         print(err)
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        populate_sheet("29")
+    except Exception as err:
+        print(err)
