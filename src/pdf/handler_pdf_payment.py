@@ -45,6 +45,7 @@ def __read_pdf(file_name):
     page = read_pdf.getPage(0)
     page_content = page.extractText(5)
     text = page_content.split('\n')
+    pdf_file.close()
     
     return text
 
