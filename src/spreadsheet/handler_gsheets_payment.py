@@ -74,8 +74,9 @@ def populate_sheet(day):
         creds = __get_credentials()    
         sheet = __get_sheet(creds)
         __has_already_populated(sheet,day)
-        (result, result2) = __simulator(sheet, "1")
-        __populate(sheet, day, stores_results=[result['values'], result2['values']])
+        (result, result2) = __simulator(sheet, day)
+        print(result['range'])
+        __populate(sheet, day, stores_results=[result['range'], result2['range']])
         
 
 
@@ -84,7 +85,4 @@ def populate_sheet(day):
 
 
 if __name__ == '__main__':
-    try:
-        populate_sheet("29")
-    except Exception as err:
-        print(err)
+    populate_sheet("29")
