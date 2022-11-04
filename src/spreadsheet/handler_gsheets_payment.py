@@ -64,19 +64,25 @@ def __simulator(sheet, day):
     return (result_subway, result_restaurant)
 
 def __populate(sheet, day:str, stores_results):
+    subway_results = {
+        'values': stores_results[0]
+    }
+    restaurant_results = {
+        'values': stores_results[1]
+    }
     result_subway = sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID,
-        range= day+"!"+RANGE_SUBWAY, valueInputOption="RAW",body = stores_results[0]).execute()
+        range= (day+"!"+RANGE_SUBWAY), valueInputOption="USER_ENTERED",body = subway_results).execute()
     result_restaurant = sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID,
-       range= day+"!"+RANGE_RESTAURANT, valueInputOption="RAW",body = stores_results[1]).execute()
+       range= day+"!"+RANGE_RESTAURANT, valueInputOption="USER_ENTERED",body = restaurant_results).execute()
 def populate_sheet(day):
     
     try:
         creds = __get_credentials()    
         sheet = __get_sheet(creds)
         __has_already_populated(sheet,day)
-        (result, result2) = __simulator(sheet, day)
-        print(result['range'])
-        __populate(sheet, day, stores_results=[result['range'], result2['range']])
+        (result, result2) = __simulator(sheet, "1")
+        
+        __populate(sheet, day, stores_results=[result['values'], result2['values']])
         
 
 
@@ -85,4 +91,7 @@ def populate_sheet(day):
 
 
 if __name__ == '__main__':
-    populate_sheet("29")
+    try:
+        populate_sheet("29")
+    except Exception as err:
+        print(err)
