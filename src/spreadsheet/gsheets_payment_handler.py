@@ -92,6 +92,6 @@ def populate_sheet(day):
 
 if __name__ == '__main__':
     try:
-        populate_sheet("29")
+        populate_sheet("30")
     except Exception as err:
         print(err)
