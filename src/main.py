@@ -26,16 +26,6 @@ def menu():
                 set_file_id()
             case _:
                 print('Opção não identificada')
-                break
             
 if __name__ == '__main__':
     menu()
-
-# results = pdf_handler.stores_results()
-# for i in range(len(results)):
-#     print("resultado " + str(i+1))   
-#     for j in results[i]:
-#         print(j)
-#         print(results[i][j])
-#         print(end='\n\n') 
-# print(len(results[0]))
