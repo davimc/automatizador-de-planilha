@@ -1,7 +1,6 @@
 def get_names():
-    store_names =  ['slz', 'cohafuma','cohama','cohab','aeroporto',
-              'reviver', 'patio norte', 'holandeses', 
-              'gaia aeroporto', 'gaia holandeses']
+    subs_names =  ['slz', 'cohafuma','cohama','cohab','aeroporto',
+              'reviver', 'patio norte', 'holandeses']
+    rest_names = ['gaia aeroporto', 'gaia holandeses']   
     
-    
-    return store_names
+    return (subs_names, rest_names)

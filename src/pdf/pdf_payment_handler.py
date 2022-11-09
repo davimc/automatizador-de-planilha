@@ -4,13 +4,27 @@ import PyPDF2
 
 import os.path
 from .payment_methods_enum import get_methods
+import infos.store as store
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 payment_methods = get_methods()
 
 
-def result_payment(file_name):
+
+
+def stores_results():
+    subs_results = {}
+    rest_results = {}
+    stores = store.get_names()
+    for x in stores[0]:
+        subs_results[x] = __result_payment(x)
+    for x in stores[1]:
+        rest_results[x] = __result_payment(x)    
+    return(subs_results, rest_results)
+
+
+def __result_payment(file_name):
     try:
         text = __read_pdf(file_name)
         

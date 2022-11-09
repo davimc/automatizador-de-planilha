@@ -10,7 +10,3 @@ def set_gsheet_id(newId:str):
 def get_gsheet_id():
     arquivo = open(filename, 'r')
     return arquivo.readline()
-    
-
-set_gsheet_id('1Piami0of4IQwRWdsFqpZm8uJvNY99z8toHCYOIRlkt')
-print(get_gsheet_id())
