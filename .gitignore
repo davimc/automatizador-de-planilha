@@ -1,3 +1,3 @@
 *.json
 *.pdf
-client_secret.txt
+!client_secret.txt
