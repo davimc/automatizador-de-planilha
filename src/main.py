@@ -3,8 +3,6 @@ import pdf.pdf_payment_handler as pdf_handler
 import spreadsheet.gsheets_payment_handler as gsheets
 import file.file_handler as file_handler
 
-## TODO: ensure that the day of the pdfs are the same as the worksheet
-
 def fill_gsheet():
     day = input('Informe o dia a ser populado: ')
     gsheets.populate_sheet(day)

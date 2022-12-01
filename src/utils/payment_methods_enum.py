@@ -11,5 +11,3 @@ def get_methods():
     
     result = {"credito":credito, "debito":debito, 'dinheiro':dinheiro, 'pix':pix, 'ifood':ifood, 'americanas':americanas, "voucher":voucher}
     return result
-
-# TODO transformar em um dicionário
