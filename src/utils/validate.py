@@ -7,12 +7,13 @@ __dict_flag = {'slz':'sao luiz','patio norte': 'pátio norte', 'holandeses':"Olh
 def translate(store_name:str):
     return __dict_flag[store_name] if store_name in __dict_flag.keys() else store_name
 
+    
 def validate_pdf(store_name:str, day = datetime.datetime.now().day-1):
     data = datetime.datetime.now()
     month = data.month
     year = data.year
-    data = (str(day)+'/'+str(month)+'/'+str(year))
-    dataFinal = (str(day)+'/'+str(month-1)+'/'+str(year))
+    data = (('0' if int(day)<10 else '') + str(day)+'/'+ ('0' if month<10 else '') + str(month)+'/'+str(year))
+    dataFinal = (('0' if int(day)<10 else '') + str(day)+'/'+ ('0' if month<10 else '') + str(month-1)+'/'+str(year))
     pdf = handler.read_pdf(store_name+'.pdf')
     
     store_name = translate(store_name)

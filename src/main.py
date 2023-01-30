@@ -17,7 +17,7 @@ def set_file_id():
     
 def menu():
     
-    choice = input(f'1.Popular planilha\n' +
+    choice = input('1.Popular planilha\n' +
                 '2.Alterar id da planilha\n')
     match choice:
         case '1':
