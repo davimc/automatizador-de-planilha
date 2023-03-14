@@ -1,2 +1,2 @@
 *.pdf
-*.json
+/src/token.json
