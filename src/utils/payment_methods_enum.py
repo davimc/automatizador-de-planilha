@@ -5,9 +5,8 @@ def get_methods():
     dinheiro = ['DINHEIRO ']
     pix = ['PIX ']
     ifood = ['IFOOD ']
-    americanas = ['AMERICANAS DELIVERY ']
     voucher = ['ALELO REFEICAO ','VOUCHER FUNCIONARIO ','VOUCHER CORTESIA ',
            'VOUCHER LATAM ','VOUCHER AZUL ']
     
-    result = {"credito":credito, "debito":debito, 'dinheiro':dinheiro, 'pix':pix, 'ifood':ifood, 'americanas':americanas, "voucher":voucher}
+    result = {"credito":credito, "debito":debito, 'dinheiro':dinheiro, 'pix':pix, 'ifood':ifood, "voucher":voucher}
     return result

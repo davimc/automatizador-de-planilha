@@ -78,8 +78,8 @@ def populate_sheet(day:str):
         __initial_rest = __final_sub + 3
         __final_rest = __initial_rest + (len(rest_results)-1)
         
-        RANGE_SUBWAY = 'B'+str(__initial_sub)+':H' + str(__final_sub)
-        RANGE_RESTAURANT = 'B'+str(__initial_rest)+':H'+ str(__final_rest)
+        RANGE_SUBWAY = 'B'+str(__initial_sub)+':G' + str(__final_sub)
+        RANGE_RESTAURANT = 'B'+str(__initial_rest)+':G'+ str(__final_rest)
         creds = __get_credentials()    
         sheet = __get_sheet(creds)
         __has_already_populated(sheet,day, RANGE_SUBWAY=RANGE_SUBWAY, RANGE_RESTAURANT=RANGE_RESTAURANT)
